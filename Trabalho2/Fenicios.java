@@ -10,7 +10,7 @@ public class Fenicios{
     int nLinhas = 0;
     int nColunas = 0;
     String matriz[][];
-    int linha_origem[] = new int[9];
+    int linha_origem[] = new int[9]; 
     int coluna_origem[] = new int[9];
     Queue<Integer> lq = new ArrayDeque<Integer>();
     Queue<Integer> cq = new ArrayDeque<Integer>();
@@ -89,7 +89,7 @@ public class Fenicios{
         }
     }
 
-    public int caminho(){
+    public int caminho(){ //TESTE: porto 2 ao porto 3
         lq.add(linha_origem[1]);
         cq.add(coluna_origem[1]);
         visitado[linha_origem[1]][coluna_origem[1]] = true;
@@ -109,7 +109,7 @@ public class Fenicios{
             }
         }
         if(porto_alcancado){
-            return move_count;
+            return move_count; // RESP: 39
         }
         return -1;
     }
