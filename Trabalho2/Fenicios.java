@@ -29,7 +29,7 @@ public class Fenicios{
         
         try {
             int numero;
-            File file = new File("teste1.txt");
+            File file = new File("case0.map");
             Scanner scanner = new Scanner(file);
             nLinhas = scanner.nextInt();
             nColunas = scanner.nextInt();
