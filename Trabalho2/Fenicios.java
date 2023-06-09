@@ -146,8 +146,12 @@ public class Fenicios{
     }
 
     public static void main(String[]args){
+        long startTime = System.currentTimeMillis();
         Fenicios f = new Fenicios();
         f.lerMapa();
         System.out.println(f.total());
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime - startTime;
+        System.out.println("Execution time in seconds: " + timeElapsed/1000);
     }
 }
