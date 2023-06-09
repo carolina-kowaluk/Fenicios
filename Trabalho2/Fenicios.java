@@ -15,22 +15,21 @@ public class Fenicios{
     Queue<Integer> lq = new ArrayDeque<Integer>();
     Queue<Integer> cq = new ArrayDeque<Integer>();
 
-    int move_count = 0;
     int nodo_anterior = 1;
     int nodo_proximo = 0;
 
     boolean porto_alcancado = false;
 
-    boolean visitado[][];
+    boolean visitado[][]; //marca se foi visitado ou n na pos
 
-    int dl[] = { -1, 1, 0, 0 };
+    int dl[] = { -1, 1, 0, 0 }; //vetores da posição norte, sul, leste, oeste para linhas e colunas
     int dc[] = { 0, 0, 1, -1 };
 
     public void lerMapa(){
         
         try {
             int numero;
-            File file = new File("case0.map");
+            File file = new File("teste1.txt");
             Scanner scanner = new Scanner(file);
             nLinhas = scanner.nextInt();
             nColunas = scanner.nextInt();
@@ -68,7 +67,6 @@ public class Fenicios{
         } catch (FileNotFoundException e) {
             System.err.format("Erro na leitura do arquivo: %s%n", e);
         }
-        System.out.println(caminho());
     }
 
     public void explorar_vizinhos(int l, int c){
@@ -89,14 +87,24 @@ public class Fenicios{
         }
     }
 
-    public int caminho(){ //TESTE: porto 2 ao porto 3
-        lq.add(linha_origem[1]);
-        cq.add(coluna_origem[1]);
-        visitado[linha_origem[1]][coluna_origem[1]] = true;
+    public int caminho(int origem, int destino){ 
+        int movimentos = 0;
+        //"resseta" tudo para seu valor original
+        visitado = new boolean[nLinhas][nColunas]; 
+        lq = new ArrayDeque<Integer>();
+        cq = new ArrayDeque<Integer>();
+        porto_alcancado = false;
+        nodo_anterior = 1;
+        nodo_proximo = 0;
+
+        lq.add(linha_origem[origem-1]);
+        cq.add(coluna_origem[origem -1]);
+        visitado[linha_origem[origem-1]][coluna_origem[origem-1]] = true;
+
         while(lq.size() > 0){
             int l = lq.remove();
             int c = cq.remove();
-            if(matriz[l][c].equals("3")){
+            if(matriz[l][c].equals(Integer.toString(destino))){
                 porto_alcancado = true;
                 break;
             }
@@ -105,26 +113,41 @@ public class Fenicios{
             if(nodo_anterior == 0){
                 nodo_anterior = nodo_proximo;
                 nodo_proximo = 0;
-                move_count++;
+                movimentos++;
             }
         }
         if(porto_alcancado){
-            return move_count; // RESP: 39
+            return movimentos; 
         }
         return -1;
+    }
+
+    public int total() {
+        int total = 0;
+        int origem = 1;
+        int destino = 2;
+        
+        while (origem <9 && destino < 10) {
+            int subtotal = caminho(origem, destino);
+
+            if (subtotal != -1){ //se o porto foi alcançado
+                total = total + subtotal;
+                origem = destino; //porto de origem vira onde chegou, pode pular os n alcançáveis
+                destino++;
+            }
+            else {
+                destino++; 
+            }
+        }
+
+        total = total + caminho(9, 1); //volta para casa
+
+        return total;
     }
 
     public static void main(String[]args){
         Fenicios f = new Fenicios();
         f.lerMapa();
+        System.out.println(f.total());
     }
 }
-
-/* print do mapa
-for (int lin = 1; lin < nLinhas; lin++) {
-    for (int col = 0; col < nColunas; col++) {
-        System.out.print(matriz[lin][col] + " ");
-    }
-    System.out.println();
-}
- */
