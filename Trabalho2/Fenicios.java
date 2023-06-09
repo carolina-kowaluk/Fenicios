@@ -140,7 +140,7 @@ public class Fenicios{
             }
         }
 
-        total = total + caminho(9, 1); //volta para casa
+        total = total + caminho(origem, 1); //volta para casa
 
         return total;
     }
