@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class Fenicios{
-        
+    
     int nLinhas = 0;
     int nColunas = 0;
     String matriz[][];
@@ -20,7 +20,7 @@ public class Fenicios{
 
     boolean porto_alcancado = false;
 
-    boolean visitado[][]; //marca se foi visitado ou n na pos
+    boolean visitado[][]; //marca se foi visitado ou não na posição
 
     int dl[] = { -1, 1, 0, 0 }; //vetores da posição norte, sul, leste, oeste para linhas e colunas
     int dc[] = { 0, 0, 1, -1 };
@@ -29,7 +29,7 @@ public class Fenicios{
         
         try {
             int numero;
-            File file = new File("case0.map");
+            File file = new File("case5.map");
             Scanner scanner = new Scanner(file);
             nLinhas = scanner.nextInt();
             nColunas = scanner.nextInt();
@@ -73,13 +73,13 @@ public class Fenicios{
         for(int i=0; i<4; i++){
             int ll = l + dl[i];
             int cc = c + dc[i];
-
+            // verifica se a posição[ll][cc] não ultrapassou os limites da matriz
             if(ll<0 || cc<0){continue;}
             if(ll>=nLinhas || cc>=nColunas){continue;}
-
+            // verifica se a posição[ll][cc] já foi visitada ou se está bloqueada
             if(visitado[ll][cc]){continue;}
             if(matriz[ll][cc].equals("*")){continue;}
-
+            // adiciona ll e cc na fila e marca como visitada
             lq.add(ll);
             cq.add(cc);
             visitado[ll][cc] = true;
@@ -96,14 +96,15 @@ public class Fenicios{
         porto_alcancado = false;
         nodo_anterior = 1;
         nodo_proximo = 0;
-
+        // adiciona posição de origem na fila e marca como visitada
         lq.add(linha_origem[origem-1]);
         cq.add(coluna_origem[origem -1]);
         visitado[linha_origem[origem-1]][coluna_origem[origem-1]] = true;
-
+        // enquanto a fila não estiver vazia
         while(lq.size() > 0){
-            int l = lq.remove();
-            int c = cq.remove();
+            int l = lq.remove(); // l = último elemento da fila
+            int c = cq.remove(); // c = último elemento da fila
+            // se a posição [l][c] é o destino sai do laço
             if(matriz[l][c].equals(Integer.toString(destino))){
                 porto_alcancado = true;
                 break;
@@ -126,7 +127,7 @@ public class Fenicios{
         int total = 0;
         int origem = 1;
         int destino = 2;
-        
+        //para passar por todos portos
         while (origem <9 && destino < 10) {
             int subtotal = caminho(origem, destino);
 
@@ -135,13 +136,11 @@ public class Fenicios{
                 origem = destino; //porto de origem vira onde chegou, pode pular os n alcançáveis
                 destino++;
             }
-            else {
+            else { //senão, origem continua a mesma e o destino é incrementado
                 destino++; 
             }
         }
-
         total = total + caminho(origem, 1); //volta para casa
-
         return total;
     }
 
@@ -149,7 +148,7 @@ public class Fenicios{
         long startTime = System.currentTimeMillis();
         Fenicios f = new Fenicios();
         f.lerMapa();
-        System.out.println(f.total());
+        System.out.println("Quantidade de combustível: " + f.total() + " litros");
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
         System.out.println("Execution time in seconds: " + timeElapsed/1000);
